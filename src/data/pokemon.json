@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "フシギダネ",
+    "baseStats": { "hp": 45, "attack": 49, "defense": 49, "spAttack": 65, "spDefense": 65, "speed": 45 }
+  },
+  {
+    "id": 4,
+    "name": "ヒトカゲ",
+    "baseStats": { "hp": 39, "attack": 52, "defense": 43, "spAttack": 60, "spDefense": 50, "speed": 65 }
+  },
+  {
+    "id": 7,
+    "name": "ゼニガメ",
+    "baseStats": { "hp": 58, "attack": 48, "defense": 65, "spAttack": 50, "spDefense": 64, "speed": 43 }
+  },
+  {
+    "id": 25,
+    "name": "ピカチュウ",
+    "baseStats": { "hp": 35, "attack": 55, "defense": 40, "spAttack": 50, "spDefense": 50, "speed": 90 }
+  }
+]

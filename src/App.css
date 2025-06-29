@@ -1,0 +1,36 @@
+body {
+  background-color: #e8eaf6; /* 背景色を少し変える */
+}
+
+.App {
+  padding: 1rem;
+}
+
+.add-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.add-button {
+  width: 60px;
+  height: 60px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 50%; /* 円形にする */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.add-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
