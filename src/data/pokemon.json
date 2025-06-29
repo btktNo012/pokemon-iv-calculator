@@ -2,21 +2,61 @@
   {
     "id": 1,
     "name": "フシギダネ",
-    "baseStats": { "hp": 45, "attack": 49, "defense": 49, "spAttack": 65, "spDefense": 65, "speed": 45 }
+    "baseStats": { "hp": 45, "attack": 49, "defense": 49, "spAttack": 65, "spDefense": 65, "speed": 45 },
+    "abilities": [
+      {
+        "name": "しんりょく",
+        "flavor_text": "HPが 減ったとき くさタイプの 技の 威力が 上がる。" 
+      },
+      {
+        "name": "ようりょくそ",
+        "flavor_text": "天気がにほんばれ・おおひでり状態のとき、すばやさが2倍になる。"
+      }
+    ]
   },
   {
     "id": 4,
     "name": "ヒトカゲ",
-    "baseStats": { "hp": 39, "attack": 52, "defense": 43, "spAttack": 60, "spDefense": 50, "speed": 65 }
+    "baseStats": { "hp": 39, "attack": 52, "defense": 43, "spAttack": 60, "spDefense": 50, "speed": 65 },
+    "abilities": [
+      {
+        "name": "もうか",
+        "flavor_text": "HPが 減ったとき ほのおタイプの 技の 威力が 上がる。" 
+      },
+      {
+        "name": "サンパワー",
+        "flavor_text": "天気が 晴れていると 特攻が 上がるが HPが 少しずつ 減っていく。"
+      }
+    ]
   },
   {
     "id": 7,
     "name": "ゼニガメ",
-    "baseStats": { "hp": 58, "attack": 48, "defense": 65, "spAttack": 50, "spDefense": 64, "speed": 43 }
+    "baseStats": { "hp": 58, "attack": 48, "defense": 65, "spAttack": 50, "spDefense": 64, "speed": 43 },
+    "abilities": [
+      {
+        "name": "げきりゅう",
+        "flavor_text": "HPが 減ったとき みずタイプの 技の 威力が 上がる。" 
+      },
+      {
+        "name": "あめうけざら",
+        "flavor_text": "天気が 雨のとき 少しずつ HPを 回復する。"
+      }
+    ]
   },
   {
     "id": 25,
     "name": "ピカチュウ",
-    "baseStats": { "hp": 35, "attack": 55, "defense": 40, "spAttack": 50, "spDefense": 50, "speed": 90 }
+    "baseStats": { "hp": 35, "attack": 55, "defense": 40, "spAttack": 50, "spDefense": 50, "speed": 90 },
+    "abilities": [
+      {
+        "name": "せいでんき",
+        "flavor_text": "静電気を 体に まとい 触った 相手を まひさせる ことがある。" 
+      },
+      {
+        "name": "ひらいしん",
+        "flavor_text": "でんきタイプの 技を 自分に 寄せつけ ダメージを 受けずに 特攻が 上がる。"
+      }
+    ]
   }
 ]

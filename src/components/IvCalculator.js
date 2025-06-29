@@ -36,7 +36,7 @@ const calculateEv = (statKey, actual, base, iv, level, natureMod) => {
 // 親からPropsを受け取るように変更
 const IvCalculator = ({ calculatorData, onDataChange, onRemove }) => {
   // calculatorDataから値を取り出す
-  const { id, pokemonId, level, nature, ivs, evs } = calculatorData;
+  const { id, pokemonId, level, nature, abilityName, ivs, evs } = calculatorData;
 
   // 実数値の計算結果を保持するStateは、このコンポーネント内に残す
   const [stats, setStats] = useState({ hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 });
@@ -45,6 +45,7 @@ const IvCalculator = ({ calculatorData, onDataChange, onRemove }) => {
   const recalculateStats = useCallback(() => {
     const selectedPokemon = pokemonData.find(p => p.id === pokemonId);
     const selectedNature = natureData.find(n => n.name === nature);
+    const selectedAbility = selectedPokemon?.abilities?.find(a => a.name === abilityName);
     if (!selectedPokemon) return;
 
     const newStats = {};
@@ -178,7 +179,16 @@ const IvCalculator = ({ calculatorData, onDataChange, onRemove }) => {
     }
     handleEvsChange({ ...evs, [key]: newEv });
   };
+  // 選択中のポケモンの詳細データを取得
+  const selectedPokemon = pokemonData.find(p => p.id === pokemonId);
 
+  // 選択中の特性の詳細データを取得
+  const selectedAbility = selectedPokemon?.abilities?.find(a => a.name === abilityName);
+
+  // 特性変更ハンドラ
+  const handleAbilityChange = (e) => {
+    onDataChange(id, { abilityName: e.target.value });
+  };
   return (
     <div className="calculator-container">
       {/* 削除ボタンを追加 */}
@@ -205,6 +215,24 @@ const IvCalculator = ({ calculatorData, onDataChange, onRemove }) => {
           </select>
         </div>
       </div>
+
+      {selectedPokemon?.abilities && (
+        <div className="ability-section">
+          <div className="form-group">
+            <label>特性:</label>
+            <select value={abilityName} onChange={handleAbilityChange}>
+              {selectedPokemon.abilities.map(ability => (
+                <option key={ability.name} value={ability.name}>
+                  {ability.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className="ability-flavor-text">
+            {selectedAbility?.flavor_text || '特性の説明'}
+          </p>
+        </div>
+      )}
 
       <div className="stats-grid">
         <div className="grid-header"></div>

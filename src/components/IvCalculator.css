@@ -165,3 +165,26 @@ input[type=number] {
   margin-top: 0;
   margin-bottom: 1.5rem;
 }
+.ability-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f0f4c3; /* 少し色を変えて目立たせる */
+  border-radius: 6px;
+  border: 1px solid #dce775;
+}
+
+.ability-section .form-group {
+  margin-bottom: 0.5rem;
+}
+
+.ability-section .form-group select {
+  width: 180px; /* 幅を調整 */
+}
+
+.ability-flavor-text {
+  margin: 0;
+  padding-left: 85px; /* ラベルの幅に合わせてインデント */
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

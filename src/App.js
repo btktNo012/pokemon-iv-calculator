@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import IvCalculator from './components/IvCalculator';
 import './App.css'; // App.cssも少しスタイルを追加します
+import pokemonData from './data/pokemon.json';
 
 // 新しい計算機の初期状態を生成する関数
 const createNewCalculator = (id) => ({
@@ -8,6 +9,7 @@ const createNewCalculator = (id) => ({
   pokemonId: 1,
   level: 50,
   nature: 'がんばりや',
+  abilityName: 'しんりょく',
   ivs: { hp: 31, attack: 31, defense: 31, spAttack: 31, spDefense: 31, speed: 31 },
   evs: { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 },
   // statsはIvCalculatorコンポーネント内で計算されるので、ここでは不要
@@ -32,9 +34,20 @@ function App() {
 
   // 特定の計算機のデータが変更されたときに呼ばれる関数
   const handleCalculatorChange = (id, updatedData) => {
-    setCalculators(calculators.map(calc => 
-      calc.id === id ? { ...calc, ...updatedData } : calc
-    ));
+    setCalculators(calculators.map(calc => {
+      if (calc.id !== id) return calc;
+      
+      const newCalc = { ...calc, ...updatedData };
+      
+      // ポケモンが変更されたら、特性をそのポケモンの最初のものにリセットする
+      if (updatedData.pokemonId) {
+        const newPokemon = pokemonData.find(p => p.id === updatedData.pokemonId);
+        if (newPokemon && newPokemon.abilities && newPokemon.abilities.length > 0) {
+          newCalc.abilityName = newPokemon.abilities[0].name;
+        }
+      }
+      return newCalc;
+    }));
   };
 
   return (
