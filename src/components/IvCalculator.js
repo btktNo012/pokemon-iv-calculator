@@ -185,10 +185,44 @@ const IvCalculator = ({ calculatorData, onDataChange, onRemove }) => {
   // 選択中の特性の詳細データを取得
   const selectedAbility = selectedPokemon?.abilities?.find(a => a.name === abilityName);
 
+  // 選択中の性格データを取得
+  const selectedNature = natureData.find(n => n.name === nature);
+
   // 特性変更ハンドラ
   const handleAbilityChange = (e) => {
     onDataChange(id, { abilityName: e.target.value });
   };
+
+  // 「16n」「11n」ボタンがクリックされたときのハンドラを新規追加
+  const handleNxButtonClick = (key, multiple) => {
+    if (!selectedPokemon) return;
+
+    const currentStat = stats[key];
+    const base = selectedPokemon.baseStats[key];
+    const iv = ivs[key];
+    
+    let natureMod = 1.0;
+    if (key !== 'hp') {
+        if (selectedNature?.increased === key) natureMod = 1.1;
+        if (selectedNature?.decreased === key) natureMod = 0.9;
+    }
+
+    // 現在の実数値 "以上" で、最も近い倍数を探す
+    let targetStat = Math.ceil(currentStat / multiple) * multiple;
+    // もし計算結果が現在値と同じかそれ以下なら、次の倍数を目標にする
+    if (targetStat <= currentStat) {
+        targetStat += multiple;
+    }
+
+    // 目標の実数値になるための努力値を逆算
+    const newEv = calculateEv(key, targetStat, base, iv, level, natureMod);
+    
+    // 努力値が252以下の場合のみ、Stateを更新
+    if (newEv <= 252) {
+        handleEvsChange({ ...evs, [key]: newEv });
+    }
+  };
+
   return (
     <div className="calculator-container">
       {/* 削除ボタンを追加 */}
@@ -240,25 +274,73 @@ const IvCalculator = ({ calculatorData, onDataChange, onRemove }) => {
         <div className="grid-header">努力値</div>
         <div className="grid-header">実数値</div>
 
-        {STAT_KEYS.map((key, i) => (
-          <React.Fragment key={key}>
-            <div className="stat-label">{STAT_LABELS[i]}</div>
-            {/* 個体値 */}
-            <div>
-              <input type="number" name={key} value={ivs[key]} onChange={handleIvInputChange} min="0" max="31" />
-            </div>
-            {/* 努力値 */}
-            <div className="ev-control">
-              <button onClick={() => handleEvStep(key, 'dec')}>-</button>
-              <input type="number" name={key} value={evs[key]} onChange={handleEvInputChange} min="0" max="252" />
-              <button onClick={() => handleEvStep(key, 'inc')}>+</button>
-            </div>
-            {/* 実数値 */}
-            <div>
-              <input type="number" name={key} value={stats[key]} onChange={handleStatChange} />
-            </div>
-          </React.Fragment>
-        ))}
+        {STAT_KEYS.map((key, i) => {
+          // ボタン表示と活性状態の判定ロジック
+          let specialButton = null;
+          const isNatureBoosted = selectedNature?.increased === key;
+
+          // HPの場合、または性格で上昇補正がかかっている場合にボタン表示を検討
+          if (selectedPokemon && (key === 'hp' || isNatureBoosted)) {
+            const multiple = key === 'hp' ? 16 : 11;
+            const currentStat = stats[key];
+
+            let targetStat = Math.ceil(currentStat / multiple) * multiple;
+            if (targetStat <= currentStat) {
+              targetStat += multiple;
+            }
+
+            let natureMod = 1.0;
+            if (isNatureBoosted) {
+              natureMod = 1.1;
+            }
+
+            // 逆算して、ボタンを押した場合に必要となる努力値を計算
+            const requiredEv = calculateEv(
+              key,
+              targetStat,
+              selectedPokemon.baseStats[key],
+              ivs[key],
+              level,
+              natureMod
+            );
+
+            const isDisabled = requiredEv > 252;
+            const titleText = isDisabled
+              ? `努力値が252を超えてしまうため設定できません (必要努力値: ${requiredEv})`
+              : `実数値を${targetStat}にする (努力値: ${requiredEv})`;
+
+            specialButton = (
+              <button
+                className="nx-button"
+                onClick={() => handleNxButtonClick(key, multiple)}
+                disabled={isDisabled}
+                title={titleText}
+              >
+                {multiple}n
+              </button>
+            );
+          } else {
+            // 条件に合致しない場合、ダミーの要素を生成
+            specialButton = <div className="nx-button-placeholder"></div>;
+          }
+          return (
+            <React.Fragment key={key}>
+              <div className="stat-label">{STAT_LABELS[i]}</div>
+              {/* 個体値 */}
+              <div><input type="number" name={key} value={ivs[key]} onChange={handleIvInputChange} min="0" max="31" /></div>
+              {/* 努力値 */}
+              <div className="ev-control">
+                <button className="inc-dec-button" onClick={() => handleEvStep(key, 'dec')}>-</button>
+                <input type="number" name={key} value={evs[key]} onChange={handleEvInputChange} min="0" max="252" />
+                <button className="inc-dec-button" onClick={() => handleEvStep(key, 'inc')}>+</button>
+                {/* 計算したボタンをここに追加 */}
+                {specialButton}
+              </div>
+              {/* 実数値 */}
+              <div><input type="number" name={key} value={stats[key]} onChange={handleStatChange} /></div>
+            </React.Fragment>
+          );
+        })}
       </div>
        <div className="total-ev">
         合計努力値: {Object.values(evs).reduce((a, b) => a + b, 0)} / 510
